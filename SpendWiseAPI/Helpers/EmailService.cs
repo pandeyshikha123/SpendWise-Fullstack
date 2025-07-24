@@ -1,47 +1,56 @@
+using RazorLight;
 using System.Net;
 using System.Net.Mail;
-using Microsoft.Extensions.Configuration;
 using SpendWiseAPI.Services.Interfaces;
 
-namespace SpendWiseAPI.Helpers
+public class EmailService : IEmailService
 {
-    public class EmailService : IEmailService
+    private readonly IConfiguration _config;
+    private readonly RazorLightEngine _razor;
+
+    public EmailService(IConfiguration config)
+{
+    _config = config;
+
+    // 👇 This tells RazorLight to look in your local Views/EmailTemplates folder
+    _razor = new RazorLightEngineBuilder()
+        .UseFileSystemProject(Path.Combine(Directory.GetCurrentDirectory(), "Views/EmailTemplates"))
+        .UseMemoryCachingProvider()
+        .Build();
+}
+    public async Task SendWelcomeEmail(string toEmail, string userName)
     {
-        private readonly IConfiguration _config;
+        var model = new { UserName = userName };
 
-        public EmailService(IConfiguration config)
+        // var htmlBody = await _razor.CompileRenderAsync("Views/EmailTemplates/Welcome", model);
+        var htmlBody = await _razor.CompileRenderAsync("Welcome.cshtml", model);
+
+
+        await SendEmail(toEmail, "🎉 Welcome to SpendWise!", htmlBody);
+    }
+
+    private async Task SendEmail(string toEmail, string subject, string htmlBody)
+    {
+        var from = _config["EmailSettings:From"];
+        var smtpHost = _config["EmailSettings:Host"];
+        var port = int.Parse(_config["EmailSettings:Port"]);
+        var ssl = bool.Parse(_config["EmailSettings:EnableSsl"]);
+        var username = _config["EmailSettings:Username"];
+        var password = _config["EmailSettings:Password"];
+
+        using var message = new MailMessage(from, toEmail)
         {
-            _config = config;
-        }
+            Subject = subject,
+            Body = htmlBody,
+            IsBodyHtml = true
+        };
 
-        public async Task SendWelcomeEmail(string toEmail, string username)
+        using var smtp = new SmtpClient(smtpHost, port)
         {
-            var from = _config["Smtp:From"] ?? throw new InvalidOperationException("Missing 'From' in config");
-            var host = _config["Smtp:Host"] ?? "smtp.gmail.com";
-            var port = int.TryParse(_config["Smtp:Port"], out int p) ? p : 587;
-            var enableSsl = bool.TryParse(_config["Smtp:EnableSsl"], out bool ssl) && ssl;
-            var usernameConfig = _config["Smtp:Username"];
-            var passwordConfig = _config["Smtp:Password"];
+            EnableSsl = ssl,
+            Credentials = new NetworkCredential(username, password)
+        };
 
-            var subject = "Welcome to SpendWise!";
-            var body = $"<h2>Hi {username},</h2><p>Welcome to SpendWise. Thank you for registering!</p>";
-
-            using var mail = new MailMessage(from, toEmail)
-            {
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true
-            };
-
-            using var smtp = new SmtpClient
-            {
-                Host = host,
-                Port = port,
-                EnableSsl = enableSsl,
-                Credentials = new NetworkCredential(usernameConfig, passwordConfig)
-            };
-
-            await smtp.SendMailAsync(mail);
-        }
+        await smtp.SendMailAsync(message);
     }
 }

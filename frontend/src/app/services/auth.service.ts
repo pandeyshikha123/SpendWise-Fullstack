@@ -24,8 +24,8 @@ export class AuthService {
   ) {}
 
   // Registers a new user and returns a token and user object
-  signup(username: string, email: string, password: string): Observable<{ token: string; user: User }> {
-    return this.http.post<{ token: string; user: User }>(`${this.apiUrl}/signup`, {
+  signup(username: string, email: string, password: string): Observable<{  accessToken: string; refreshToken: string; user: User }> {
+    return this.http.post<{  accessToken: string; refreshToken: string; user: User }>(`${this.apiUrl}/signup`, {
       username,
       email,
       password,
@@ -33,12 +33,13 @@ export class AuthService {
   }
 
   // Authenticates a user and returns a token and user object
-  signin(email: string, password: string): Observable<{ token: string; user: User }> {
-    return this.http.post<{ token: string; user: User }>(`${this.apiUrl}/signin`, {
-      email,
-      password,
-    });
-  }
+  signin(email: string, password: string): Observable<{ accessToken: string; refreshToken: string; user: User }> {
+  return this.http.post<{ accessToken: string; refreshToken: string; user: User }>(
+    `${this.apiUrl}/signin`,
+    { email, password }
+  );
+}
+
 
   // Retrieves the authenticated user's profile from the backend
   getProfile(): Observable<User> {
@@ -67,8 +68,14 @@ export class AuthService {
     sessionStorage.setItem('user', JSON.stringify(user));
   }
 
+   saveAuthDataNew(accessToken: string,refreshToken: string,  user: User): void {
+    sessionStorage.setItem('accessToken', accessToken);
+    sessionStorage.setItem('refreshToken', refreshToken);
+    sessionStorage.setItem('user', JSON.stringify(user));
+  }
+
   getToken(): string | null {
-    return sessionStorage.getItem('token');
+    return sessionStorage.getItem('accessToken');
   }
 
   getUser(): User | null {

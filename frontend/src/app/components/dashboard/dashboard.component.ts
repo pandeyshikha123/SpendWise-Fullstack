@@ -66,10 +66,10 @@ export class DashboardComponent {
   // Fetch categories from backend
   loadCategories(): void {
     this.expenseOperations.loadCategories().subscribe({
-      next: (categories) => {
+      next: (categories:any) => {
         this.categories = categories;
       },
-      error: (err) => {
+      error: (err:any) => {
         const errorMessage = err?.error?.message || 'Failed to load categories';
         this.toastService.show(errorMessage, 'error');
         console.error('Error loading categories:', err);
@@ -91,13 +91,13 @@ loadExpenses(): void {
   };
   this.loading = true;
   this.expenseOperations.expenseService.getExpenses(options).subscribe({
-    next: (res) => {
+    next: (res:any) => {
       this.expenses = res.expenses;
       this.totalExpenses = res.total;
       this.updatePagination(res.total, this.pageSize);
       this.loading = false;
     },
-    error: (err) => {
+    error: (err:any) => {
       this.error = err.error?.message || 'Failed to load expenses';
       this.toastService.show(this.error, 'error');
       this.loading = false;
@@ -133,7 +133,7 @@ loadExpenses(): void {
         this.toastService.show('Expense added successfully', 'success');
         this.error = '';
       },
-      error: (err) => {
+      error: (err:any) => {
         this.error = err.error?.message || 'Failed to add expense';
         this.toastService.show(this.error, 'error');
       },
@@ -148,7 +148,7 @@ loadExpenses(): void {
   updateExpense(): void {
     if (!this.editingExpense || !this.editingExpense._id) return;
     this.expenseOperations.updateExpense(this.editingExpense._id, this.formExpense).subscribe({
-      next: (updatedExpense) => {
+      next: (updatedExpense:any) => {
         this.originalExpenses = this.expenseOperations.updateLocalExpenses(this.originalExpenses, updatedExpense);
         this.filterExpenses();
         this.resetForm();
@@ -156,7 +156,7 @@ loadExpenses(): void {
         this.toastService.show('Expense updated successfully', 'success');
         this.error = '';
       },
-      error: (err) => {
+      error: (err:any) => {
         this.error = err.error?.message || 'Failed to update expense';
         this.toastService.show(this.error, 'error');
       },
@@ -170,7 +170,7 @@ loadExpenses(): void {
         this.filterExpenses();
         this.toastService.show('Expense deleted successfully', 'success');
       },
-      error: (err) => {
+      error: (err:any) => {
         this.error = err.error?.message || 'Failed to delete expense';
         this.toastService.show(this.error, 'error');
       },

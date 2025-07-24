@@ -1,0 +1,84 @@
+@model dynamic
+@{
+    var date = ((DateTime)Model.Date).ToString("dd/MM/yyyy");
+    var time = DateTime.Now.ToString("hh:mm tt");
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SpendWise - Expense Updated</title>
+</head>
+<body style="font-family: Segoe UI, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px;">
+        <tr>
+            <td align="center">
+                <table width="600" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #a0ace0 0%, #403946 100%); padding: 30px 40px; text-align: center;">
+                            <h1 style="color: #fff; font-size: 28px; margin: 0;">🏦 SpendWise</h1>
+                            <p style="color: #fff; font-size: 16px; margin-top: 8px;">Your Personal Expense Tracker</p>
+                        </td>
+                    </tr>
+
+                    <!-- Greeting -->
+                    <tr>
+                        <td style="padding: 30px 40px 20px;">
+                            <h2 style="color: #333; font-size: 24px; margin-bottom: 10px;">Hello @Model.UserName! 👋</h2>
+                            <p style="color: #666; font-size: 16px;">
+                                An updated expense has been saved in your SpendWise account.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Expense Details -->
+                    <tr>
+                        <td style="padding: 0 40px 30px;">
+                            <div style="background: #f8f9fa; border-left: 5px solid #667eea; border-radius: 12px; padding: 25px;">
+                                <h3 style="color: #333; font-size: 20px; margin-bottom: 20px;">🔄 Updated Expense Details</h3>
+                                <table width="100%">
+                                    <tr>
+                                        <td>📊 <strong>Category:</strong></td>
+                                        <td style="text-align: right;">@Model.Category</td>
+                                    </tr>
+                                    <tr>
+                                        <td>💵 <strong>Amount:</strong></td>
+                                        <td style="text-align: right; color: #dc3545; font-weight: bold;">₹@String.Format("{0:N0}", Model.Amount)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>📅 <strong>Date:</strong></td>
+                                        <td style="text-align: right;">@date</td>
+                                    </tr>
+                                    <tr>
+                                        <td>📝 <strong>Description:</strong></td>
+                                        <td style="text-align: right;">@Model.Description</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Tip Section -->
+                    <tr>
+                        <td style="padding: 0 40px 30px;">
+                            <div style="background: #e7f3ff; padding: 20px; border-left: 4px solid #0066cc; border-radius: 8px;">
+                                <h4 style="color: #0066cc; margin-bottom: 10px;">💡 Smart Spending Tip</h4>
+                                <p style="color: #333;">Track your expenses regularly to identify spending patterns and make better financial decisions!</p>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background: #f8f9fa; padding: 25px 40px; text-align: center; border-top: 1px solid #dee2e6;">
+                            <p style="color: #6c757d; font-size: 14px;">This email was sent at @time on @date</p>
+                            <p style="color: #6c757d; font-size: 12px;">© 2025 SpendWise. Keep tracking, keep saving! 🎯</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

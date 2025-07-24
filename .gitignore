@@ -1,0 +1,50 @@
+# Global
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+.env.local
+.env.*.local
+
+# Frontend (Angular)
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+frontend/.vscode/
+frontend/coverage/
+frontend/.cache/
+frontend/.eslintcache
+
+# Backend (ASP.NET Core)
+SpendWiseAPI/bin/
+SpendWiseAPI/obj/
+SpendWiseAPI/*.user
+SpendWiseAPI/*.suo
+SpendWiseAPI/*.vspscc
+SpendWiseAPI/*.vssscc
+SpendWiseAPI/.vs/
+SpendWiseAPI/.vscode/
+SpendWiseAPI/appsettings.Development.json
+SpendWiseAPI/appsettings.Local.json
+SpendWiseAPI/appsettings.*.local.json
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.sublime-workspace
+*.sublime-project
+
+# OS generated files
+*.DS_Store
+*.AppleDouble
+*.LSOverride
+
+# Others
+frontend/public/

@@ -66,7 +66,7 @@ export class SignupComponent implements OnDestroy {
         this.showSuccessModal = true;
         this.isLoading = false;
 
-        this.authService.saveAuthData(response.token, response.user);
+        this.authService.saveAuthDataNew(response.accessToken, response.refreshToken, response.user);
 
         // 🔧 Updated: reset the full form including validation states
         this.clearForm();

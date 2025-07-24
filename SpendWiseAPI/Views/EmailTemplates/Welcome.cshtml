@@ -1,0 +1,41 @@
+@model dynamic
+@{
+    var date = DateTime.Now.ToString("dd/MM/yyyy");
+    var time = DateTime.Now.ToString("hh:mm tt");
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to SpendWise</title>
+</head>
+<body style="font-family: Segoe UI, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+    <table width="100%">
+        <tr>
+            <td align="center">
+                <table width="600" style="background-color: #ffffff; border-radius: 12px; overflow: hidden;">
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 30px 40px; text-align: center;">
+                            <h1 style="color: #fff; margin: 0;">🎉 Welcome to SpendWise</h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 30px 40px;">
+                            <h2 style="color: #333;">Hi @Model.UserName 👋</h2>
+                            <p style="color: #555;">We're excited to have you onboard. SpendWise is your personal expense tracker to help you manage money smarter.</p>
+                            <p style="color: #555;">Start adding your expenses, track where your money goes, and gain control of your finances.</p>
+                            <a href="https://spendwise.com/login" style="display:inline-block; background:#667eea; color:#fff; padding:12px 24px; border-radius:8px; text-decoration:none;">Start Tracking</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #f8f9fa; text-align: center; padding: 20px;">
+                            <p style="color: #6c757d;">This email was sent at @time on @date</p>
+                            <p style="color: #6c757d; font-size: 12px;">© 2025 SpendWise. Track smart, live better.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

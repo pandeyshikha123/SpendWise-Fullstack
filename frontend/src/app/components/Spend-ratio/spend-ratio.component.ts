@@ -98,11 +98,11 @@ export class SpendRatioComponent implements OnInit {
   // Loads the expense summary from the backend
   loadSummary(): void {
     this.expenseService.getExpenseSummary().subscribe({
-      next: (summary) => {
+      next: (summary:any) => {
         this.summary = summary;
         this.updateChartData();
       },
-      error: (err) => {
+      error: (err:any) => {
         this.error = err.error?.message || 'Failed to load expense summary';
         if (err.status === 401) {
           this.authService.logout();
