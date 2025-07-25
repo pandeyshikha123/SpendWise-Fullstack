@@ -108,6 +108,9 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddSingleton<MongoDbContext>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
 
 
 // 8️⃣ AutoMapper

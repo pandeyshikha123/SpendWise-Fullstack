@@ -32,7 +32,7 @@ export interface ExpenseSummary {
 })
 export class ExpenseService {
   private apiUrl = `${environment.apiUrl}/expenses`;
-  private apiUrls = `${environment.apiUrl}/categories`;
+  private apiUrls = `${environment.apiUrl}/Category`;
   // private apiUrls = 'http://localhost:5000/api/categories'; // your backend URL
 
   constructor(

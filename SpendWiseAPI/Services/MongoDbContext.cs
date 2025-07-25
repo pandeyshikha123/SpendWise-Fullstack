@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using SpendWiseAPI.Config;
+using SpendWiseAPI.Models; // Ensure this namespace contains Category.cs
 
 namespace SpendWiseAPI.Services
 {
@@ -13,7 +14,12 @@ namespace SpendWiseAPI.Services
             _database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
+        // You can still use the generic method:
         public IMongoCollection<T> GetCollection<T>(string collectionName) =>
             _database.GetCollection<T>(collectionName);
+
+        // Optional shortcut for Categories collection
+        public IMongoCollection<Category> Categories =>
+            _database.GetCollection<Category>("Categories");
     }
 }
