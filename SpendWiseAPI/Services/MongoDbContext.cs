@@ -21,5 +21,13 @@ namespace SpendWiseAPI.Services
         // Optional shortcut for Categories collection
         public IMongoCollection<Category> Categories =>
             _database.GetCollection<Category>("Categories");
+        
+        // Optional shortcut for Expenses collection
+        // This assumes you have an Expense model defined in SpendWiseAPI.Models    
+         public IMongoCollection<Expense> Expenses => _database.GetCollection<Expense>("Expenses");
+        
+        // Optional shortcut for Users collection
+        public IMongoCollection<User> Users =>
+            _database.GetCollection<User>("Users"); 
     }
 }

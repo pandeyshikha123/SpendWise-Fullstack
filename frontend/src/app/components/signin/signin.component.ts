@@ -43,7 +43,7 @@ onSubmit(): void {
       console.log('Signin response:', response);
       
       // Save tokens and user (modify `saveAuthData()` to handle both tokens)
-      this.authService.saveAuthDataNew(response.accessToken, response.refreshToken, response.user);
+      this.authService.saveAuthData(response.accessToken, response.refreshToken, response.user);
 
       this.toastService.show('Sign in successful! Welcome back.', 'success');
       this.isLoading = false;

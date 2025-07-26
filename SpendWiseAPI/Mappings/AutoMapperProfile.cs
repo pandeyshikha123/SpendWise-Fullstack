@@ -11,13 +11,12 @@ namespace SpendWiseAPI.Mappings
             // User mappings
             CreateMap<User, UserResponseDTO>();
             CreateMap<UserRegisterDTO, User>();
-
             CreateMap<SignUpDto, User>();
-            CreateMap<User, UserResponseDTO>();
 
             // Expense mappings
             CreateMap<Expense, ExpenseResponseDTO>();
-            CreateMap<ExpenseCreateDTO, Expense>();
+            CreateMap<ExpenseCreateDTO, Expense>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => "Expense"));
 
             // Category mappings
             CreateMap<Category, CategoryResponseDTO>();

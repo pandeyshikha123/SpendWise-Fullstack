@@ -1,26 +1,41 @@
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  HttpInterceptor,
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HTTP_INTERCEPTORS,
+  HttpErrorResponse
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-// Suggest comments for the code below
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  // This interceptor adds the Authorization header with the Bearer token to outgoing HTTP requests
-  // It retrieves the token from sessionStorage and appends it to the request headers if available
+  constructor(private router: Router) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = sessionStorage.getItem('token'); // sessionStorage
+    const token = sessionStorage.getItem('accessToken'); 
 
-    // If token exists, clone the request and add the Authorization header
     if (token) {
       const cloned = req.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`,
         },
       });
-      // Pass the cloned request with the token
-      return next.handle(cloned);
+      return next.handle(cloned).pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            // Token expired or invalid
+            sessionStorage.clear();
+            this.router.navigate(['/signin']);
+          }
+          return throwError(() => error);
+        })
+      );
     }
-    // If no token, pass the original request
+
     return next.handle(req);
   }
 }

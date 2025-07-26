@@ -20,17 +20,14 @@ namespace SpendWiseAPI.Models
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime Date { get; set; } = DateTime.Now;
 
-        [Required]
         [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; } = null!;
 
         public string? Category { get; set; }
 
-        [Required]
-        [RegularExpression("Income|Expense")]
-        public string Type { get; set; } = "Expense";
+        public string? Notes { get; set; }
 
-        // 🔷 Optional: You can add this if you want future filtering/sorting
-        public string? Notes { get; set; }   // 🔹 NEW FIELD (optional)
+        [Required]
+        public string Type { get; set; } = "Expense"; // always set to Expense
     }
 }

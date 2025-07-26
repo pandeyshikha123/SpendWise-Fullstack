@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
+
 // User interface representing the authenticated user
 export interface User {
   id: string;
@@ -15,17 +16,18 @@ export interface User {
   providedIn: 'root',
 })
 export class AuthService {
+
   // Base URL for authentication endpoints
   private apiUrl = `${environment.apiUrl}/auth`;
 
   constructor(
     private http: HttpClient,
     private router: Router
-  ) {}
+  ) { }
 
   // Registers a new user and returns a token and user object
-  signup(username: string, email: string, password: string): Observable<{  accessToken: string; refreshToken: string; user: User }> {
-    return this.http.post<{  accessToken: string; refreshToken: string; user: User }>(`${this.apiUrl}/signup`, {
+  signup(username: string, email: string, password: string): Observable<{ accessToken: string; refreshToken: string; user: User }> {
+    return this.http.post<{ accessToken: string; refreshToken: string; user: User }>(`${this.apiUrl}/signup`, {
       username,
       email,
       password,
@@ -34,11 +36,11 @@ export class AuthService {
 
   // Authenticates a user and returns a token and user object
   signin(email: string, password: string): Observable<{ accessToken: string; refreshToken: string; user: User }> {
-  return this.http.post<{ accessToken: string; refreshToken: string; user: User }>(
-    `${this.apiUrl}/signin`,
-    { email, password }
-  );
-}
+    return this.http.post<{ accessToken: string; refreshToken: string; user: User }>(
+      `${this.apiUrl}/signin`,
+      { email, password }
+    );
+  }
 
 
   // Retrieves the authenticated user's profile from the backend
@@ -63,12 +65,7 @@ export class AuthService {
   }
 
   // Saves authentication token and user info to sessionStorage
-  saveAuthData(token: string, user: User): void {
-    sessionStorage.setItem('token', token);
-    sessionStorage.setItem('user', JSON.stringify(user));
-  }
-
-   saveAuthDataNew(accessToken: string,refreshToken: string,  user: User): void {
+  saveAuthData(accessToken: string, refreshToken: string, user: User): void {
     sessionStorage.setItem('accessToken', accessToken);
     sessionStorage.setItem('refreshToken', refreshToken);
     sessionStorage.setItem('user', JSON.stringify(user));
@@ -76,6 +73,10 @@ export class AuthService {
 
   getToken(): string | null {
     return sessionStorage.getItem('accessToken');
+  }
+
+  getRefreshToken(): string | null {
+    return sessionStorage.getItem('refreshToken');
   }
 
   getUser(): User | null {
@@ -89,7 +90,7 @@ export class AuthService {
   }
 
   logout(): void {
-    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('accessToken');
     sessionStorage.removeItem('user');
     this.router.navigate(['/signin']);
   }

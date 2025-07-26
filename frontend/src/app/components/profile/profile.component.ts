@@ -34,7 +34,7 @@ export class ProfileComponent {
     this.authService.getProfile().subscribe({
       next: (user) => {
         this.user = user;
-        this.authService.saveAuthData(this.authService.getToken()!, user);
+        this.authService.saveAuthData(this.authService.getToken()!,this.authService.getRefreshToken()!, user);
         console.log('User profile loaded:', user); // Added for debugging
       },
       error: (err) => {
@@ -72,7 +72,7 @@ export class ProfileComponent {
       this.authService.uploadProfilePicture(file).subscribe({
         next: (response) => {
           this.user = response.user;
-          this.authService.saveAuthData(this.authService.getToken()!, response.user);
+          this.authService.saveAuthData(this.authService.getToken()!,this.authService.getRefreshToken()!, response.user);
           this.isUploading = false;
           this.error = 'Profile picture updated successfully!';
           // Added: Auto-dismiss success message after 5 seconds
@@ -95,16 +95,21 @@ export class ProfileComponent {
   getCategoryProgress(categoryTotal: number): number {
     return this.summary && this.summary.total > 0 ? (categoryTotal / this.summary.total) * 100 : 0;
   }
+  
   // Added: Method to get image URL
-  getImageUrl(path: string): string {
-    if (!path) return '';
-    // Fixed: Normalize path and ensure correct base URL
-    const normalizedPath = path.startsWith('/uploads/') ? path : `/uploads${path.startsWith('/') ? path : '/' + path}`;
-    const baseUrl = environment.apiUrl.replace(/\/api$/, ''); // Remove /api
-    const fullUrl = `${baseUrl}${normalizedPath}`;
-    console.log('Generated image URL:', fullUrl); // Added for debugging
-    return fullUrl;
+ getImageUrl(path: string): string {
+  if (!path) return '';
+
+  // ✅ If Cloudinary or any absolute URL, use as is
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
   }
+
+  // 👇 If local image (rare in your case), build full URL
+  const baseUrl = environment.apiUrl.replace(/\/api$/, '');
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${baseUrl}${normalizedPath}`;
+}
 
   onImageError(event: Event): void {
     this.imageLoadError = true;

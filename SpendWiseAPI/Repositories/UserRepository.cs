@@ -1,27 +1,19 @@
 using SpendWiseAPI.Models;
-using Microsoft.Extensions.Configuration;
+using SpendWiseAPI.Repositories.Interfaces;
 using MongoDB.Driver;
+using System;
 using System.Threading.Tasks;
 
 namespace SpendWiseAPI.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly IMongoCollection<User> _users;
 
-        public UserRepository(IConfiguration config)
+        // IMongoDatabase injected by DI
+        public UserRepository(IMongoDatabase database)
         {
-            var connectionString = config["MongoDbSettings:ConnectionString"];
-            var databaseName = config["MongoDbSettings:DatabaseName"];
-
-            if (string.IsNullOrEmpty(connectionString))
-                throw new ArgumentNullException(nameof(connectionString), "MongoDB connection string is missing");
-
-            if (string.IsNullOrEmpty(databaseName))
-                throw new ArgumentNullException(nameof(databaseName), "MongoDB database name is missing");
-
-            var client = new MongoClient(connectionString);
-            var database = client.GetDatabase(databaseName);
+            if (database == null) throw new ArgumentNullException(nameof(database));
             _users = database.GetCollection<User>("Users");
         }
 
@@ -37,6 +29,7 @@ namespace SpendWiseAPI.Repositories
 
         public async Task AddUserAsync(User user)
         {
+            if (user == null) throw new ArgumentNullException(nameof(user));
             await _users.InsertOneAsync(user);
         }
 
@@ -45,16 +38,11 @@ namespace SpendWiseAPI.Repositories
             return await _users.Find(u => u.RefreshToken == refreshToken).FirstOrDefaultAsync();
         }
 
-        public async Task SaveAsync()
+        public async Task UpdateUserAsync(User user)
         {
-            await Task.CompletedTask; // No operation needed for MongoDB
-        }
-
-        public async Task UpdateAsync(User user)
-        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
             var filter = Builders<User>.Filter.Eq(u => u.Id, user.Id);
             await _users.ReplaceOneAsync(filter, user);
         }
-
     }
 }

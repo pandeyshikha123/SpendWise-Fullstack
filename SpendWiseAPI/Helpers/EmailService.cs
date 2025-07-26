@@ -9,24 +9,14 @@ public class EmailService : IEmailService
     private readonly RazorLightEngine _razor;
 
     public EmailService(IConfiguration config)
-{
-    _config = config;
-
-    // 👇 This tells RazorLight to look in your local Views/EmailTemplates folder
-    _razor = new RazorLightEngineBuilder()
-        .UseFileSystemProject(Path.Combine(Directory.GetCurrentDirectory(), "Views/EmailTemplates"))
-        .UseMemoryCachingProvider()
-        .Build();
-}
-    public async Task SendWelcomeEmail(string toEmail, string userName)
     {
-        var model = new { UserName = userName };
+        _config = config;
 
-        // var htmlBody = await _razor.CompileRenderAsync("Views/EmailTemplates/Welcome", model);
-        var htmlBody = await _razor.CompileRenderAsync("Welcome.cshtml", model);
-
-
-        await SendEmail(toEmail, "🎉 Welcome to SpendWise!", htmlBody);
+        // This tells RazorLight to look in your local Views/EmailTemplates folder
+        _razor = new RazorLightEngineBuilder()
+            .UseFileSystemProject(Path.Combine(Directory.GetCurrentDirectory(), "Views/EmailTemplates"))
+            .UseMemoryCachingProvider()
+            .Build();
     }
 
     private async Task SendEmail(string toEmail, string subject, string htmlBody)
@@ -53,4 +43,48 @@ public class EmailService : IEmailService
 
         await smtp.SendMailAsync(message);
     }
+    public async Task SendWelcomeEmail(string toEmail, string userName)
+    {
+        var model = new { UserName = userName };
+
+        var htmlBody = await _razor.CompileRenderAsync("Welcome.cshtml", model);
+
+
+        await SendEmail(toEmail, "🎉 Welcome to SpendWise!", htmlBody);
+    }
+
+
+
+    public async Task SendExpenseAddedEmail(string toEmail, string userName, string category, decimal amount, DateTime date, string description)
+    {
+        var model = new
+        {
+            UserName = userName,
+            Category = category,
+            Amount = amount,
+            Date = date,
+            Description = description
+        };
+
+        var htmlBody = await _razor.CompileRenderAsync("ExpenseAdded.cshtml", model);
+        await SendEmail(toEmail, "🧾 Expense Added to SpendWise", htmlBody);
+    }
+
+    public async Task SendExpenseUpdatedEmail(string toEmail, string userName, string category, decimal amount, DateTime date, string description)
+    {
+        var model = new
+        {
+            UserName = userName,
+            Category = category,
+            Amount = amount,
+            Date = date,
+            Description = description
+        };
+
+        var htmlBody = await _razor.CompileRenderAsync("ExpenseUpdated.cshtml", model);
+        await SendEmail(toEmail, "✏️ Expense Updated in SpendWise", htmlBody);
+    }
+
+
+
 }

@@ -76,3 +76,6 @@ select {
   background-color: #2e2e40;
   color: white;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
