@@ -34,6 +34,15 @@ SpendWiseAPI/appsettings.Development.json
 SpendWiseAPI/appsettings.Local.json
 SpendWiseAPI/appsettings.*.local.json
 
+# Common ignores for Node.js projects
+node_modules/
+dist/
+build/
+.env
+coverage/
+*.log
+.DS_Store
+
 # IDE/Editor
 .vscode/
 .idea/
