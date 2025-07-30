@@ -23,11 +23,23 @@ public class AuthController : ControllerBase
     [HttpPost("refresh-token")]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto dto)
     {
+         try
+        {
         var response = await _authService.RefreshTokenAsync(dto.RefreshToken);
         if (response == null)
             return Unauthorized("Invalid refresh token.");
 
         return Ok(response);
+         }
+        catch (Exception ex)
+        {
+            return BadRequest(new
+            {
+                message = ex.Message,
+                stackTrace = ex.StackTrace,
+                inner = ex.InnerException?.Message
+            });
+        }
     }
 
     [HttpPost("signup")]
@@ -59,7 +71,10 @@ public class AuthController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = ex.Message });
+            return BadRequest(new {
+                message = ex.Message,
+                stackTrace = ex.StackTrace,
+                inner = ex.InnerException?.Message });
         }
     }
 
@@ -67,33 +82,58 @@ public class AuthController : ControllerBase
     [HttpGet("me")]
     public async Task<IActionResult> GetMe()
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID not found in token");
+        try
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized("User ID not found in token");
 
-        var user = await _authService.GetUserAsync(userId);
-        return user == null ? NotFound() : Ok(user);
+            var user = await _authService.GetUserAsync(userId);
+            return user == null ? NotFound() : Ok(user);
+        }
+        catch (Exception ex)
+        {
+
+            return BadRequest(new
+            {
+                message = ex.Message,
+                stackTrace = ex.StackTrace,
+                inner = ex.InnerException?.Message
+            });
+        }
     }
 
     [Authorize]
     [HttpPost("profile-picture")]
     public async Task<IActionResult> UploadProfilePicture(IFormFile profilePicture)
     {
-        if (profilePicture == null || profilePicture.Length == 0)
-            return BadRequest(new { message = "No file uploaded" });
+        try
+        {
+            if (profilePicture == null || profilePicture.Length == 0)
+                return BadRequest(new { message = "No file uploaded" });
 
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
 
-        var imageUrl = await _imageService.UploadImageAsync(profilePicture);
-        if (string.IsNullOrEmpty(imageUrl))
-            return StatusCode(500, new { message = "Image upload to Cloudinary failed" });
+            var imageUrl = await _imageService.UploadImageAsync(profilePicture);
+            if (string.IsNullOrEmpty(imageUrl))
+                return StatusCode(500, new { message = "Image upload to Cloudinary failed" });
 
-        var user = await _authService.UpdateProfilePictureAsync(userId, imageUrl);
-        if (user == null)
-            return NotFound(new { message = "User not found" });
+            var user = await _authService.UpdateProfilePictureAsync(userId, imageUrl);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
 
-        return Ok(new { message = "Profile picture updated", user });
+            return Ok(new { message = "Profile picture updated", user });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new
+            {
+                message = ex.Message,
+                stackTrace = ex.StackTrace,
+                inner = ex.InnerException?.Message
+            });
+        }
     }
 }

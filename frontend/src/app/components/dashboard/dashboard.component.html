@@ -25,15 +25,8 @@
 
           <div class="form-group">
             <label for="amount">Amount</label>
-            <input
-              type="number"
-              id="amount"
-              [(ngModel)]="formExpense.amount"
-              name="amount"
-              required
-              min="0"
-              placeholder="₹0.00"
-            />
+            <input type="number" id="amount" [(ngModel)]="formExpense.amount" name="amount" required min="0"
+              placeholder="₹0.00" />
           </div>
           <div class="form-group">
             <label for="date">Date</label>
@@ -41,23 +34,13 @@
           </div>
           <div class="form-group">
             <label for="description">Description</label>
-            <input
-              type="text"
-              id="description"
-              [(ngModel)]="formExpense.description"
-              name="description"
-              required
-              placeholder="Enter description"
-            />
+            <input type="text" id="description" [(ngModel)]="formExpense.description" name="description" required
+              placeholder="Enter description" />
           </div>
 
           <div class="form-actions">
-            <button
-              type="submit"
-              class="action-btn submit-btn flex items-center justify-center gap-2"
-              [disabled]="!expenseForm.valid || loading"
-              [title]="editingExpense ? 'Update' : 'Add'"
-            >
+            <button type="submit" class="action-btn submit-btn flex items-center justify-center gap-2"
+              [disabled]="!expenseForm.valid || loading" [title]="editingExpense ? 'Update' : 'Add'">
               <ng-container *ngIf="!loading">
                 {{ editingExpense ? 'Update' : 'Add' }}
               </ng-container>
@@ -67,13 +50,8 @@
               </ng-container>
             </button>
 
-            <button
-              *ngIf="editingExpense"
-              type="button"
-              class="action-btn cancel-btn"
-              (click)="cancelEdit()"
-              title="Cancel"
-            >
+            <button *ngIf="editingExpense" type="button" class="action-btn cancel-btn" (click)="cancelEdit()"
+              title="Cancel">
               Cancel
             </button>
           </div>
@@ -89,12 +67,13 @@
         <div class="stat-grid">
           <div class="stat-card">
             <p class="stat-label">Total Expenses</p>
-             <p class="stat-value">{{ totalExpenseAmount | currency: 'INR' }}</p>
+            <p class="stat-value">{{ totalExpenseAmount | currency: 'INR' }}</p>
 
           </div>
           <div class="stat-card">
             <p class="stat-label">Number of Expenses</p>
-            <p class="stat-value">{{ expenses.length }}</p>
+            <p class="stat-value">{{ totalExpenses }}</p>
+
           </div>
         </div>
       </div>
@@ -104,12 +83,8 @@
           <!-- Combined search, category filter, period filter, and sort into a single row -->
           <div class="filter-row">
             <label for="filterCategory">Filter by Category</label>
-            <select
-              [(ngModel)]="selectedCategory"
-              name="category"
-              id="filterCategory"
-              (ngModelChange)="filterExpenses()"
-            >
+            <select [(ngModel)]="selectedCategory" name="category" id="filterCategory"
+              (ngModelChange)="filterExpenses()">
               <option value="" disabled selected>Select a category</option>
               <option value="All">All</option>
               <option *ngFor="let category of categories" [value]="category.name">
@@ -130,13 +105,8 @@
               <option value="price-asc">Price (Lowest to Highest)</option>
             </select>
             <label for="search">Search</label>
-            <input
-              type="text"
-              id="search"
-              [(ngModel)]="searchQuery"
-              (ngModelChange)="filterExpenses()"
-              placeholder="Search by date, price, or description"
-            />
+            <input type="text" id="search" [(ngModel)]="searchQuery" (ngModelChange)="filterExpenses()"
+              placeholder="Search by date, price, or description" />
           </div>
         </div>
         <div class="expense-list">
@@ -159,8 +129,10 @@
                 <td>{{ expense.description }}</td>
                 <td>{{ expense.date | date: 'd MMMM y' }}</td>
                 <td>
-                  <button class="action-btn edit-btn" (click)="editExpense(expense)" title="Edit" aria-label="edit an expense">Edit</button>
-                  <button class="action-btn delete-btn" (click)="deleteExpense(expense.id)" title="Delete" aria-label="delete an expense">
+                  <button class="action-btn edit-btn" (click)="editExpense(expense)" title="Edit"
+                    aria-label="edit an expense">Edit</button>
+                  <button class="action-btn delete-btn" (click)="deleteExpense(expense.id)" title="Delete"
+                    aria-label="delete an expense">
                     delete
                   </button>
                 </td>
@@ -171,29 +143,16 @@
           <!-- <div class="pagination-toolbar"> -->
           <div class="pagination-toolbar">
             <div class="pagination-controls" *ngIf="totalPages > 1">
-              <button
-                class="page-btn prev-btn"
-                [disabled]="currentPage === 1"
-                (click)="changePage(currentPage - 1)"
-                title="Previous Page"
-              >
+              <button class="page-btn prev-btn" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)"
+                title="Previous Page">
                 <span class="arrow">◄</span>
               </button>
-              <button
-                *ngFor="let page of [].constructor(totalPages); let i = index"
-                class="page-btn"
-                [class.active]="currentPage === i + 1"
-                (click)="changePage(i + 1)"
-                [title]="'Page ' + (i + 1)"
-              >
+              <button *ngFor="let page of [].constructor(totalPages); let i = index" class="page-btn"
+                [class.active]="currentPage === i + 1" (click)="changePage(i + 1)" [title]="'Page ' + (i + 1)">
                 {{ i + 1 }}
               </button>
-              <button
-                class="page-btn next-btn"
-                [disabled]="currentPage === totalPages"
-                (click)="changePage(currentPage + 1)"
-                title="Next Page"
-              >
+              <button class="page-btn next-btn" [disabled]="currentPage === totalPages"
+                (click)="changePage(currentPage + 1)" title="Next Page">
                 <span class="arrow">►</span>
               </button>
             </div>
@@ -211,8 +170,10 @@
         </div>
         <div class="download-buttons">
           <h2>download reports</h2>
-          <button class="action-btn pdf-btn" (click)="downloadPDF()" title="Download PDF" aria-label="download report as pdf">pdf</button>
-          <button class="action-btn excel-btn" (click)="downloadExcel()" title="Download Excel" aria-label="download report as excel">excel</button>
+          <button class="action-btn pdf-btn" (click)="downloadPDF()" title="Download PDF"
+            aria-label="download report as pdf">pdf</button>
+          <button class="action-btn excel-btn" (click)="downloadExcel()" title="Download Excel"
+            aria-label="download report as excel">excel</button>
         </div>
       </div>
     </main>

@@ -93,6 +93,8 @@ export class DashboardComponent {
     this.expenseOperations.expenseService.getExpenses(options).subscribe({
       next: (res: any) => {
         this.expenses = res.expenses;
+        this.totalExpenses = res.total;
+        console.log("Number of Expenses",this.totalExpenses);
         this.totalExpenseAmount = this.expenses.reduce((sum, e) => sum + e.amount, 0);
         this.updatePagination(res.total, this.pageSize);
         this.loading = false;
