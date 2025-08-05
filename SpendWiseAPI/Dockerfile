@@ -1,19 +1,24 @@
-# --- Build Stage ---
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
+# Use .NET 9.0 Preview SDK
+FROM mcr.microsoft.com/dotnet/sdk:9.0-preview AS build
 
-# Copy .csproj and restore as distinct layers
-COPY SpendWiseAPI/SpendWiseAPI.csproj SpendWiseAPI/
-RUN dotnet restore SpendWiseAPI/SpendWiseAPI.csproj
+WORKDIR /app
 
-# Copy the rest of the code
+# Copy project files
+COPY SpendWiseAPI/*.csproj ./SpendWiseAPI/
+WORKDIR /app/SpendWiseAPI
+RUN dotnet restore
+
+# Copy rest of the code
+WORKDIR /app
 COPY . .
 
 # Build and publish
-RUN dotnet publish SpendWiseAPI/SpendWiseAPI.csproj -c Release -o /app/publish
+WORKDIR /app/SpendWiseAPI
+RUN dotnet publish -c Release -o /app/publish
 
-# --- Runtime Stage ---
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+# Final runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-preview AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .
+
 ENTRYPOINT ["dotnet", "SpendWiseAPI.dll"]
