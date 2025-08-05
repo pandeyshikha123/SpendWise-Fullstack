@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SpendWiseAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2092a1eba838be7eaeb674c4746992efa0f5a6bb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a000d2e2e198806a2030fad0672c384ac529e602")]
 [assembly: System.Reflection.AssemblyProductAttribute("SpendWiseAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SpendWiseAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

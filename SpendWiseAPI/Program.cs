@@ -132,6 +132,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
@@ -139,7 +140,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-Console.WriteLine("✅ SpendWise API is running...");
+Console.WriteLine("SpendWise API is running...");
 Console.WriteLine("🔗 Swagger UI available at /swagger");
 
 app.Run();

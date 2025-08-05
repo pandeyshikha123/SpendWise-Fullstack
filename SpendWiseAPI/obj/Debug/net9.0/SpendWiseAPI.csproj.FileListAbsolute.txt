@@ -402,3 +402,4 @@ C:\Users\admin\Desktop\spendwise-fullstack\SpendWiseAPI\obj\Debug\net9.0\refint\
 C:\Users\admin\Desktop\spendwise-fullstack\SpendWiseAPI\obj\Debug\net9.0\SpendWiseAPI.pdb
 C:\Users\admin\Desktop\spendwise-fullstack\SpendWiseAPI\obj\Debug\net9.0\SpendWiseAPI.genruntimeconfig.cache
 C:\Users\admin\Desktop\spendwise-fullstack\SpendWiseAPI\obj\Debug\net9.0\ref\SpendWiseAPI.dll
+C:\Users\admin\Desktop\spendwise-fullstack\SpendWiseAPI\bin\Debug\net9.0\appsettings.Production.json
