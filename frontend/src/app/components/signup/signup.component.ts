@@ -25,7 +25,7 @@ export class SignupComponent implements OnDestroy {
   private successTimeout: any;
   private errorTimeout: any;
 
-  // 🔧 Added: to access the form reference and reset it
+  // Added: to access the form reference and reset it
   @ViewChild('signupForm') signupForm!: NgForm;
 
   constructor(
@@ -68,7 +68,7 @@ export class SignupComponent implements OnDestroy {
 
         this.authService.saveAuthData(response.accessToken, response.refreshToken, response.user);
 
-        // 🔧 Updated: reset the full form including validation states
+        //  Updated: reset the full form including validation states
         this.clearForm();
 
         this.successTimeout = setTimeout(() => {
@@ -123,7 +123,7 @@ export class SignupComponent implements OnDestroy {
     this.clearTimeouts();
   }
 
-  // 🔧 Updated: properly reset form state (not just field values)
+  // Updated: properly reset form state (not just field values)
   private clearForm(): void {
     if (this.signupForm) {
       this.signupForm.resetForm();
