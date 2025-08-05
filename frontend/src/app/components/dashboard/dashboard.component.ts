@@ -40,13 +40,15 @@ export class DashboardComponent {
   selectedPeriod: string = 'All';
   searchQuery: string = '';
   sortOption: string = 'date-asc';
-  pageSizeOptions: number[] = [5, 10, 20, 50 ,100, 150,200];
+  pageSizeOptions: number[] = [5, 10, 20, 50, 100, 150, 200];
   currentPage: number = 1;
   pageSize: number = 5;
   filteredExpenses: Expense[] = [];
   totalPages: number = 1;
   totalExpenses: number = 0;
   totalExpenseAmount = 0;
+  sidebarOpen: boolean = false;
+
 
   constructor(
     private authService: AuthService,
@@ -94,7 +96,7 @@ export class DashboardComponent {
       next: (res: any) => {
         this.expenses = res.expenses;
         this.totalExpenses = res.total;
-        console.log("Number of Expenses",this.totalExpenses);
+        console.log("Number of Expenses", this.totalExpenses);
         this.totalExpenseAmount = this.expenses.reduce((sum, e) => sum + e.amount, 0);
         this.updatePagination(res.total, this.pageSize);
         this.loading = false;
@@ -141,7 +143,10 @@ export class DashboardComponent {
       ...expense,
       _id: expense._id || expense.id || null,
     };
-   this.formExpense = this.expenseOperations.prepareEditExpense(expense);
+    this.formExpense = this.expenseOperations.prepareEditExpense(expense);
+    
+  // This line opens the sidebar panel
+  this.sidebarOpen = true;
   }
 
 
@@ -155,7 +160,7 @@ export class DashboardComponent {
 
     this.expenseOperations.updateExpense(this.editingExpense._id, this.formExpense).subscribe({
       next: (updatedExpense: any) => {
-        console.log('✅ Updated Expense:', updatedExpense);
+        console.log('Updated Expense:', updatedExpense);
         this.originalExpenses = this.expenseOperations.updateLocalExpenses(this.originalExpenses, updatedExpense);
         this.filterExpenses();
         this.resetForm();
@@ -163,6 +168,7 @@ export class DashboardComponent {
         this.toastService.show('Expense updated successfully', 'success');
         this.error = '';
         this.loading = false;
+        this.sidebarOpen = false;
 
       },
       error: (err: any) => {
@@ -176,26 +182,26 @@ export class DashboardComponent {
 
   // Delete an expense
   deleteExpense(expenseId: string): void {
-      this.dialogService.confirm('Confirm Deletion', 'Are you sure you want to delete this expense?')
-    .subscribe((confirmed: boolean) => {
-      if (!confirmed) return;
+    this.dialogService.confirm('Confirm Deletion', 'Are you sure you want to delete this expense?')
+      .subscribe((confirmed: boolean) => {
+        if (!confirmed) return;
 
-    this.loading = true;
-    this.expenseOperations.deleteExpense(expenseId).subscribe({
-      next: () => {
-        this.originalExpenses = this.originalExpenses.filter((e) => e._id !== expenseId);
-        this.filterExpenses();
-        this.toastService.show('Expense deleted successfully', 'success');
-        this.loading = false;
-      },
-      error: (err: any) => {
-        this.error = err.error?.message || 'Failed to delete expense';
-        this.toastService.show(this.error, 'error');
-        this.loading = false;
-      },
+        this.loading = true;
+        this.expenseOperations.deleteExpense(expenseId).subscribe({
+          next: () => {
+            this.originalExpenses = this.originalExpenses.filter((e) => e._id !== expenseId);
+            this.filterExpenses();
+            this.toastService.show('Expense deleted successfully', 'success');
+            this.loading = false;
+          },
+          error: (err: any) => {
+            this.error = err.error?.message || 'Failed to delete expense';
+            this.toastService.show(this.error, 'error');
+            this.loading = false;
+          },
+        });
       });
-    });
-}
+  }
 
 
   // Reset the expense form
@@ -237,7 +243,7 @@ export class DashboardComponent {
   changePage(page: number) {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
-    this.loadExpenses(); // Make sure this method fetches expenses for the current page
+    this.loadExpenses(); // this method fetches expenses for the current page
   }
 
   downloadPDF(): void {
@@ -252,6 +258,10 @@ export class DashboardComponent {
 
   onPageSizeChange(): void {
     this.filterExpenses(true);
+  }
+
+   toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
   }
 
 }
