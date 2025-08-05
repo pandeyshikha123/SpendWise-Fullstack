@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: spendwise-api
+    env: docker
+    plan: free
+    branch: main
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    buildFilter:
+      paths:
+        - Dockerfile
+        - SpendWiseAPI/**
