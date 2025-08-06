@@ -10,5 +10,6 @@ namespace SpendWiseAPI.Repositories.Interfaces
         Task AddUserAsync(User user);
         Task<User?> GetUserByRefreshToken(string refreshToken);
         Task UpdateUserAsync(User user);
+        Task<User> CreateAsync(User user);
     }
 }

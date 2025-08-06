@@ -1,7 +1,6 @@
 using SpendWiseAPI.Models;
 using SpendWiseAPI.Repositories.Interfaces;
 using MongoDB.Driver;
-using System;
 using System.Threading.Tasks;
 
 namespace SpendWiseAPI.Repositories
@@ -10,7 +9,6 @@ namespace SpendWiseAPI.Repositories
     {
         private readonly IMongoCollection<User> _users;
 
-        // IMongoDatabase injected by DI
         public UserRepository(IMongoDatabase database)
         {
             if (database == null) throw new ArgumentNullException(nameof(database));
@@ -43,6 +41,14 @@ namespace SpendWiseAPI.Repositories
             if (user == null) throw new ArgumentNullException(nameof(user));
             var filter = Builders<User>.Filter.Eq(u => u.Id, user.Id);
             await _users.ReplaceOneAsync(filter, user);
+        }
+
+        // Implement the CreateAsync method
+        public async Task<User> CreateAsync(User user)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+            await _users.InsertOneAsync(user);
+            return user;
         }
     }
 }

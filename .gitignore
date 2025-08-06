@@ -33,6 +33,7 @@ SpendWiseAPI/.vscode/
 SpendWiseAPI/appsettings.Development.json
 SpendWiseAPI/appsettings.Local.json
 SpendWiseAPI/appsettings.*.local.json
+SpendWiseAPI.Tests/
 
 # Common ignores for Node.js projects
 node_modules/
